@@ -1,0 +1,15 @@
+{
+  "hash": "fe086163",
+  "configHash": "a90b388f",
+  "lockfileHash": "dc993926",
+  "browserHash": "353947d4",
+  "optimized": {
+    "cross-fetch": {
+      "src": "../../node_modules/cross-fetch/dist/browser-ponyfill.js",
+      "file": "cross-fetch.js",
+      "fileHash": "1c4c134d",
+      "needsInterop": true
+    }
+  },
+  "chunks": {}
+}

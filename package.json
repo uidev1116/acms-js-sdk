@@ -1,0 +1,71 @@
+{
+  "name": "acms-js-sdk",
+  "version": "0.0.0",
+  "description": "a-blog cms JavaScript SDK",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/umd/acms-js-sdk.umd.js",
+  "module": "./dist/es/acms-js-sdk.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/acms-js-sdk.js",
+      "require": "./dist/acms-js-sdk.umd.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uidev1116/acms-js-sdk.git"
+  },
+  "author": "uidev1116",
+  "license": "MIT",
+  "scripts": {
+    "test": "vitest",
+    "dev": "vite",
+    "build": "vite build",
+    "check-update": "npx -p npm-check-updates -c ncu",
+    "release:commit": "node ./scripts/commit.js",
+    "release:patch": "npm version patch --no-git-tag-version && npm run release:commit",
+    "release:minor": "npm version minor --no-git-tag-version && npm run release:commit",
+    "release:major": "npm version mejor --no-git-tag-version && npm run release:commit",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "cross-fetch": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.7",
+    "@typescript-eslint/eslint-plugin": "^6.18.0",
+    "@typescript-eslint/parser": "^6.18.0",
+    "co": "^4.6.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-standard-with-typescript": "^43.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "node-cmd": "^5.0.0",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.11",
+    "vite-plugin-dts": "^3.7.0",
+    "vite-plugin-eslint": "^1.8.1",
+    "vitest": "^1.1.3"
+  },
+  "volta": {
+    "node": "20.10.0"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "prettier --write"
+  },
+  "tags": [
+    "a-blog cms"
+  ],
+  "keywords": [
+    "a-blog cms"
+  ]
+}
