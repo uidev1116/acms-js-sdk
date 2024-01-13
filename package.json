@@ -11,8 +11,8 @@
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/acms-js-sdk.js",
-      "require": "./dist/acms-js-sdk.umd.js"
+      "import": "./dist/es/acms-js-sdk.js",
+      "require": "./dist/umd/acms-js-sdk.umd.js"
     }
   },
   "repository": {
