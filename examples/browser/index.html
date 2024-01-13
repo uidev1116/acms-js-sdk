@@ -10,8 +10,8 @@
     import { createClient } from '../../src/index.ts'
 
     const acmsClient = createClient({
-      baseUrl: "https://example.com",
-      apiKey: "YOUR_API_KEY",
+      baseUrl: import.meta.env.VITE_BASE_URL,
+      apiKey: import.meta.env.VITE_API_KEY,
     });
 
     (async () => {
