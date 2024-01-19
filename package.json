@@ -11,8 +11,19 @@
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/types/index.d.ts",
       "import": "./dist/es/acms-js-sdk.js",
-      "require": "./dist/umd/acms-js-sdk.umd.js"
+      "require": "./dist/cjs/acms-js-sdk.cjs"
+    },
+    "./acmsPath": {
+      "types": "./dist/types/lib/acmsPath/index.d.ts",
+      "import": "./dist/es/acms-path.js",
+      "require": "./dist/cjs/acms-path.cjs"
+    },
+    "./typeGuard": {
+      "types": "./dist/types/lib/typeGuard/index.d.ts",
+      "import": "./dist/es/type-guard.js",
+      "require": "./dist/cjs/type-guard.cjs"
     }
   },
   "repository": {

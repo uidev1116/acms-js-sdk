@@ -6,9 +6,13 @@ import dts from 'vite-plugin-dts';
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: {
+        'acms-js-sdk': resolve(__dirname, 'src/index.ts'),
+        'acms-path': resolve(__dirname, 'src/lib/acmsPath/index.ts'),
+        'type-guard': resolve(__dirname, 'src/lib/typeGuard/index.ts'),
+      },
       name: 'acmsClient',
-      fileName: '[format]/acms-js-sdk',
+      fileName: '[format]/[name]',
     },
   },
   plugins: [

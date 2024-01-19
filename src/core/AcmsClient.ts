@@ -1,4 +1,4 @@
-import { type AcmsContext, acmsPath } from '../lib/acmsPath';
+import acmsPath, { type AcmsContext } from '../lib/acmsPath';
 import { getMessageFromResponse, isString } from '../utils';
 import createFetch, { createHeaders } from '../lib/fetch';
 import { type AcmsClientConfig, type AcmsResponse } from '../types';
