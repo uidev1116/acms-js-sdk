@@ -6,7 +6,7 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/umd/acms-js-sdk.umd.js",
+  "main": "./dist/cjs/acms-js-sdk.cjs",
   "module": "./dist/es/acms-js-sdk.js",
   "types": "./dist/types/index.d.ts",
   "exports": {
