@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { acmsPath } from '.';
+import acmsPath from '.';
 
 describe('blog', () => {
   test('work with blog context', () => {
