@@ -1,5 +1,5 @@
 {
-  "name": "acms-js-sdk",
+  "name": "@uidev1116/js-sdk",
   "version": "0.0.0",
   "description": "a-blog cms JavaScript SDK",
   "type": "module",
@@ -26,6 +26,9 @@
       "require": "./dist/cjs/type-guard.cjs"
     }
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/uidev1116/acms-js-sdk.git"
@@ -37,11 +40,8 @@
     "dev": "vite",
     "build": "vite build",
     "check-update": "npx -p npm-check-updates -c ncu",
-    "release:commit": "node ./scripts/commit.js",
-    "release:patch": "npm version patch --no-git-tag-version && npm run release:commit",
-    "release:minor": "npm version minor --no-git-tag-version && npm run release:commit",
-    "release:major": "npm version mejor --no-git-tag-version && npm run release:commit",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prepack": "npm run test && npm run build"
   },
   "dependencies": {
     "cross-fetch": "^4.0.0"
