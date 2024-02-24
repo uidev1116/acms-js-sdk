@@ -51,13 +51,12 @@ export default class AcmsClient {
   ): Promise<AcmsResponse<T>> {
     const config = { ...this.config, ...options };
     const { requestInit, responseType } = config;
-    const fetch = createFetch();
+    const fetch = await createFetch();
+    const url = this.createUrl(acmsContextOrUrl);
+    const fetchOptions = await this.createFetchOptions(requestInit);
 
     try {
-      const response = await fetch(
-        this.createUrl(acmsContextOrUrl),
-        this.createFetchOptions(requestInit),
-      );
+      const response = await fetch(url, fetchOptions);
 
       const { ok, status, statusText, headers } = response;
       const data = await response[responseType]();
@@ -96,8 +95,8 @@ export default class AcmsClient {
     }
   }
 
-  private createFetchOptions(init?: RequestInit) {
-    const headers = createHeaders(init?.headers);
+  private async createFetchOptions(init?: RequestInit) {
+    const headers = await createHeaders(init?.headers);
 
     if (!headers.has('X-API-KEY')) {
       headers.set('X-API-KEY', this.apiKey);
