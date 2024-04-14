@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.3](https://github.com/uidev1116/acms-js-sdk/compare/v0.0.2...v0.0.3) (2024-04-14)
+
+
+### Bug Fixes
+
+* constructor type guard ([1d72f4d](https://github.com/uidev1116/acms-js-sdk/commit/1d72f4d0963fb4557df75c972400992261e5dbea))
+
 ## [0.0.2](https://github.com/uidev1116/acms-js-sdk/compare/v0.0.1...v0.0.2) (2024-02-24)
 
 
