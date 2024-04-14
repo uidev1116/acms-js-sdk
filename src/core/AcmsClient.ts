@@ -22,10 +22,10 @@ export default class AcmsClient {
     baseUrl: string;
     apiKey: string;
   } & Partial<AcmsClientConfig>) {
-    if (baseUrl == null && baseUrl === '') {
+    if (baseUrl != null && baseUrl === '') {
       throw new Error('baseUrl is required.');
     }
-    if (apiKey == null && apiKey === '') {
+    if (apiKey != null && apiKey === '') {
       throw new Error('apiKey is required.');
     }
 
