@@ -68,7 +68,7 @@ acmsClient
   });
 ```
 
-Relative paths can also be specified.
+Relative paths from `baseUrl` can also be specified.
 
 ```js
 acmsClient
@@ -101,6 +101,8 @@ acmsClient
   });
 ```
 
+You can see the acmsPath section for more details.
+
 ### Error Handling
 
 You can handle errors.
@@ -122,6 +124,88 @@ acmsClient
     }
     console.error(error);
   });
+```
+
+## Options
+
+The second argument can be an option.
+
+Below is a list of all options.
+
+| name         | description                                                                     | type                                                                                           | default   |
+| ------------ | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- |
+| requestInit  | An object containing any custom settings that you want to apply to the request. | RequestInit                                                                                    | undefined |
+| responseType | indication the type of data that the server will respond with                   | 'arrayBuffer'<br>  &#124; 'blob'<br>  &#124; 'formData'<br>  &#124; 'json'<br>  &#124; 'text'; | 'json'    |
+
+Options can also be set in the arguments of the createClinent function.
+
+In this case, all requests will reflect the set options.
+
+```js
+const acmsClient = createClient({
+  baseUrl: 'YOUR_BASE_URL',
+  apiKey: 'Your_API_KEY',
+  requestInit: {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  },
+  responseType: 'json',
+});
+```
+
+### Next.js App Router
+
+For Next.js App Router, you can specify the `revalidate` option.
+
+[Functions: fetch | Next.js](https://nextjs.org/docs/app/api-reference/functions/fetch)
+```js
+const response = await acmsClient.get(
+  { api: 'MODULE_ID' },
+  {
+    requestInit: {
+      next: {
+        revalidate: 60,
+      },
+    }
+  },
+);
+```
+
+
+### AbortController: abort() method
+
+You can use AbortController.
+
+```js
+const controller = new AbortController();
+const response = await acmsClient.get(
+  { api: 'MODULE_ID' },
+  {
+    requestInit: {
+      signal: controller.signal,
+    }
+  },
+);
+
+setTimeout(() => {
+  controller.abort();
+}, 1000);
+```
+
+
+## TypeScript
+
+You can use TypeScript.
+
+```ts
+acmsClient
+  .get<ResponseType>({
+    api: 'MODULE_ID',
+  })
+  .then((response) => {
+    console.log(response.data); // response.data is ResponseType
+  })
 ```
 
 ## acmsPath
