@@ -4,11 +4,10 @@
     <title>a-blog cms SDK</title>
   </head>
   <body>
-    <h1 id="text"></h1>
   </body>
   <script type="module">
     import { createClient } from '../../src/index.ts'
-    
+
     const acmsClient = createClient({
       baseUrl: import.meta.env.VITE_BASE_URL,
       apiKey: import.meta.env.VITE_API_KEY,
