@@ -5,11 +5,11 @@ JavaScript SDK for a-blog cms. Works in Node.js and modern browsers.
 ## Installation
 
 ```bash
-npm install acms-js-sdk
+npm install @uidev1116/acms-js-sdk
 
 # or
 
-yarn add acms-js-sdk
+yarn add @uidev1116/acms-js-sdk
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ First, you need to create a client instance.
 ES Modules:
 
 ```js
-import { createClient } from 'acms-js-sdk';
+import { createClient } from '@uidev1116/acms-js-sdk';
 
 const acmsClient = createClient({
   baseUrl: 'YOUR_BASE_URL',
@@ -30,7 +30,7 @@ const acmsClient = createClient({
 CommonJS:
 
 ```js
-const { createClient } = require('acms-js-sdk');
+const { createClient } = require('@uidev1116/acms-js-sdk');
 
 const acmsClient = createClient({
   baseUrl: 'YOUR_BASE_URL',
@@ -42,7 +42,7 @@ CDN:
 
 ```html
 <script type="module">
-  const { createClient } = 'https://unpkg.com/acms-js-sdk/dist/es/acms-js-sdk.js';
+  const { createClient } = 'https://unpkg.com/@uidev1116/acms-js-sdk@latest/dist/es/acms-js-sdk.js';
 
   const acmsClient = createClient({
     baseUrl: 'YOUR_BASE_URL',
@@ -214,7 +214,7 @@ You can get the path of Url Context by using utility function `acmsPath`.
 
 ```js
 
-import { acmsPath } from 'acms-js-sdk';
+import { acmsPath } from '@uidev1116/acms-js-sdk';
 
 const path = acmsPath({
   blog: 'BLOG_CODE',
@@ -261,7 +261,7 @@ interface AcmsContext {
 You can check if the error is `AcmsFetchError` by using utility function `isAcmsFetchError`.
 
 ```js
-import { isAcmsFetchError } from 'acms-js-sdk';
+import { isAcmsFetchError } from '@uidev1116/acms-js-sdk';
 
 acmsClient
   .get({
