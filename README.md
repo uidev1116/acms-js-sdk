@@ -230,6 +230,7 @@ const path = acmsPath({
   // limit: 10,
   // keyword: 'KEYWORD',
   // tpl: 'include/sample.json'
+  // admin: 'entry_index',
   api: 'MODULE_ID',
 });
 ```
@@ -237,8 +238,9 @@ const path = acmsPath({
 ### Params Type
 
 ```ts
-interface AcmsContext {
+interface AcmsPathParams {
   blog?: string | number;
+  admin?: string;
   category?: string | string[] | number;
   entry?: string | number;
   user?: number;
@@ -277,4 +279,23 @@ acmsClient
     }
     console.error(error);
   });
+```
+
+## parseAcmsPath
+
+The `parseAcmsPath` function is a utility designed to parse [acms path](https://developer.a-blogcms.jp/document/reference/acms_path.html) into a structured context object. This function is particularly useful for extracting various segments from a URL path and organizing them into a meaningful context that can be used for further processing in applications.
+
+```js
+import { parseAcmsPath } from '@uidev1116/acms-js-sdk';
+
+// For example, if the current URL path is '/bid/1/cid/2/eid/3/page/2/field/color/eq/red'
+const context = parseAcmsPath(window.location.pathname);
+// Output:
+// {
+//   bid: 1,
+//   cid: 2,
+//   eid: 3,
+//   page: 2,
+//   field: 'color/eq/red'
+// }
 ```

@@ -1,12 +1,17 @@
-import acmsPath, { type AcmsContext } from '../lib/acmsPath';
+import { acmsPath, type AcmsPathParams } from '../lib/acmsPath';
 import { getMessageFromResponse, isString } from '../utils';
 import createFetch, { createHeaders } from '../lib/fetch';
-import { type AcmsClientConfig, type AcmsResponse } from '../types';
+import {
+  type AcmsClientOptions,
+  type AcmsClientConfig,
+  type AcmsResponse,
+} from '../types';
 import { AcmsFetchError } from '.';
 import { isAcmsFetchError } from '../lib/typeGuard';
 
 const defaultOptions: AcmsClientConfig = {
   responseType: 'json',
+  acmsPathOptions: {},
 };
 
 export default class AcmsClient {
@@ -21,7 +26,7 @@ export default class AcmsClient {
   }: {
     baseUrl: string;
     apiKey: string;
-  } & Partial<AcmsClientConfig>) {
+  } & AcmsClientOptions) {
     if (baseUrl != null && baseUrl === '') {
       throw new Error('baseUrl is required.');
     }
@@ -46,13 +51,13 @@ export default class AcmsClient {
   }
 
   private async request<T = any>(
-    acmsContextOrUrl: AcmsContext | URL | string,
+    acmsPathParamsOrUrl: AcmsPathParams | URL | string,
     options: Partial<AcmsClientConfig> = {},
   ): Promise<AcmsResponse<T>> {
     const config = { ...this.config, ...options };
     const { requestInit, responseType } = config;
     const fetch = await createFetch();
-    const url = this.createUrl(acmsContextOrUrl);
+    const url = this.createUrl(acmsPathParamsOrUrl);
     const fetchOptions = await this.createFetchOptions(requestInit);
 
     try {
@@ -105,21 +110,24 @@ export default class AcmsClient {
     return { ...init, headers };
   }
 
-  private createUrl(acmsContextOrUrl: AcmsContext | URL | string) {
-    if (isString(acmsContextOrUrl)) {
-      return new URL(acmsContextOrUrl, this.baseUrl);
+  private createUrl(acmsPathParamsOrUrl: AcmsPathParams | URL | string) {
+    if (isString(acmsPathParamsOrUrl)) {
+      return new URL(acmsPathParamsOrUrl, this.baseUrl);
     }
-    if (acmsContextOrUrl instanceof URL) {
-      return new URL(acmsContextOrUrl, this.baseUrl);
+    if (acmsPathParamsOrUrl instanceof URL) {
+      return new URL(acmsPathParamsOrUrl, this.baseUrl);
     }
-    return new URL(acmsPath({ ...acmsContextOrUrl }), this.baseUrl);
+    return new URL(
+      acmsPath({ ...acmsPathParamsOrUrl }, this.config.acmsPathOptions),
+      this.baseUrl,
+    );
   }
 
   public async get<T = any>(
-    acmsContextOrUrl: AcmsContext | URL | string,
+    acmsPathParamsOrUrl: AcmsPathParams | URL | string,
     options: Partial<AcmsClientConfig> = {},
   ): Promise<AcmsResponse<T>> {
-    return await this.request<T>(acmsContextOrUrl, {
+    return await this.request<T>(acmsPathParamsOrUrl, {
       ...options,
       requestInit: { ...options.requestInit, method: 'GET' },
     });
@@ -127,5 +135,9 @@ export default class AcmsClient {
 
   public static isAcmsFetchError(payload: any) {
     return isAcmsFetchError(payload);
+  }
+
+  public getConfig() {
+    return this.config;
   }
 }
