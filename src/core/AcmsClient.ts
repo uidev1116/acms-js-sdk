@@ -1,12 +1,17 @@
 import { acmsPath, type AcmsPathParams } from '../lib/acmsPath';
 import { getMessageFromResponse, isString } from '../utils';
 import createFetch, { createHeaders } from '../lib/fetch';
-import { type AcmsClientConfig, type AcmsResponse } from '../types';
+import {
+  type AcmsClientOptions,
+  type AcmsClientConfig,
+  type AcmsResponse,
+} from '../types';
 import { AcmsFetchError } from '.';
 import { isAcmsFetchError } from '../lib/typeGuard';
 
 const defaultOptions: AcmsClientConfig = {
   responseType: 'json',
+  acmsPathOptions: {},
 };
 
 export default class AcmsClient {
@@ -21,7 +26,7 @@ export default class AcmsClient {
   }: {
     baseUrl: string;
     apiKey: string;
-  } & Partial<AcmsClientConfig>) {
+  } & AcmsClientOptions) {
     if (baseUrl != null && baseUrl === '') {
       throw new Error('baseUrl is required.');
     }
@@ -112,7 +117,10 @@ export default class AcmsClient {
     if (acmsPathParamsOrUrl instanceof URL) {
       return new URL(acmsPathParamsOrUrl, this.baseUrl);
     }
-    return new URL(acmsPath({ ...acmsPathParamsOrUrl }), this.baseUrl);
+    return new URL(
+      acmsPath({ ...acmsPathParamsOrUrl }, this.config.acmsPathOptions),
+      this.baseUrl,
+    );
   }
 
   public async get<T = any>(
@@ -127,5 +135,9 @@ export default class AcmsClient {
 
   public static isAcmsFetchError(payload: any) {
     return isAcmsFetchError(payload);
+  }
+
+  public getConfig() {
+    return this.config;
   }
 }
