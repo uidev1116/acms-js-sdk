@@ -1,6 +1,6 @@
 import { type AcmsPathSegments } from './types';
 
-export const defaultAcmsPathSegments: AcmsPathSegments = {
+export const defaultAcmsPathSegments = {
   bid: 'bid',
   cid: 'cid',
   eid: 'eid',
@@ -15,4 +15,4 @@ export const defaultAcmsPathSegments: AcmsPathSegments = {
   admin: 'admin',
   tpl: 'tpl',
   api: 'api',
-};
+} as const satisfies AcmsPathSegments;

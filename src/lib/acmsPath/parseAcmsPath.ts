@@ -9,9 +9,9 @@ import type {
 } from './types';
 import { formatDate } from './utils';
 
-const defaultOptions: ParseAcmsPathConfig = {
+const defaultOptions = {
   segments: defaultAcmsPathSegments,
-};
+} as const satisfies ParseAcmsPathConfig;
 
 export default function parseAcmsPath(
   path: string,
