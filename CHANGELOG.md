@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/uidev1116/acms-js-sdk/compare/v0.1.0...v0.1.1) (2024-06-23)
+
+
+### Bug Fixes
+
+* can't override config by get method ([cdbdf11](https://github.com/uidev1116/acms-js-sdk/commit/cdbdf11625e8f0b4100cf7390d9de769fe0c213a))
+
 ## [0.1.0](https://github.com/uidev1116/acms-js-sdk/compare/v0.0.3...v0.1.0) (2024-06-23)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@uidev1116/acms-js-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "a-blog cms JavaScript SDK",
   "type": "module",
   "files": [
