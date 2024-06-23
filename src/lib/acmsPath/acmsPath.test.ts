@@ -180,8 +180,8 @@ describe('acmsPath', () => {
       cid: 2,
       eid: 123,
       tag: ['apple', 'grape'],
-      span: { start: '2022-01-01', end: '2022-12-31' },
       page: 2,
+      order: 'id-asc',
     };
     const segments = {
       bid: 'custom-bid',
@@ -197,8 +197,6 @@ describe('acmsPath', () => {
     expect(path).toContain('custom-page/2/');
     // Ensures default segments are used for those not overridden
     expect(path).toContain('/tag/apple/grape');
-    expect(path).toContain(
-      '2022-01-01%2009%3A00%3A00/-/2022-12-31%2009%3A00%3A00/',
-    );
+    expect(path).toContain('/order/id-asc');
   });
 });
