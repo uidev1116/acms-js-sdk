@@ -1,11 +1,13 @@
+import deepmerge from 'deepmerge';
 import { isDateString } from '../../utils';
 import { defaultAcmsPathSegments } from './defaultOptions';
-import type { AcmsContext, AcmsPathSegments } from './types';
+import type {
+  AcmsContext,
+  AcmsPathSegments,
+  ParseAcmsPathConfig,
+  ParseAcmsPathOptions,
+} from './types';
 import { formatDate } from './utils';
-
-interface ParseAcmsPathConfig {
-  segments: AcmsPathSegments;
-}
 
 const defaultOptions: ParseAcmsPathConfig = {
   segments: defaultAcmsPathSegments,
@@ -13,14 +15,19 @@ const defaultOptions: ParseAcmsPathConfig = {
 
 export default function parseAcmsPath(
   path: string,
-  options: Partial<ParseAcmsPathConfig> = {},
+  options: ParseAcmsPathOptions = {},
 ): AcmsContext {
-  const { segments } = { ...defaultOptions, ...options };
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  const { segments } = deepmerge(
+    defaultOptions,
+    options,
+  ) as ParseAcmsPathConfig;
+
   const slugs = path.split('/').filter((segment) => segment);
   const context: AcmsContext = {};
   const unresolvedSlugs = [];
   const segmentKeys = Object.keys(segments);
-  const segmentSlugs = Object.values(segments);
+  const segmentSlugs = Object.values(segments) as string[];
 
   for (let i = 0; i < slugs.length; i++) {
     const slug = slugs[i];
@@ -49,15 +56,15 @@ export default function parseAcmsPath(
               i++;
               break;
             case 'tpl':
-              context.tpl = collectSlugs(slugs, i + 1, segmentKeys);
+              context.tpl = collectSlugs(slugs, i + 1, segmentSlugs);
               i += context.tpl.split('/').length; // 次のセグメントまでスキップ
               break;
             case 'field':
-              context.field = collectSlugs(slugs, i + 1, segmentKeys);
+              context.field = collectSlugs(slugs, i + 1, segmentSlugs);
               i += context.field.split('/').length; // 次のセグメントまでスキップ
               break;
             case 'tag':
-              context.tag = collectSlugs(slugs, i + 1, segmentKeys)
+              context.tag = collectSlugs(slugs, i + 1, segmentSlugs)
                 .split('/')
                 .map((tag) => tag.trim());
               i += context.tag.length; // 次のセグメントまでスキップ
@@ -121,14 +128,14 @@ export default function parseAcmsPath(
 }
 
 function collectSlugs(
-  segments: string[],
+  slugs: string[],
   startIndex: number,
-  segmentKeys: string[],
+  segmentSlugs: string[],
 ): string {
   const collected = [];
-  for (let i = startIndex; i < segments.length; i++) {
-    if (segmentKeys.includes(segments[i])) break;
-    collected.push(segments[i]);
+  for (let i = startIndex; i < slugs.length; i++) {
+    if (segmentSlugs.includes(slugs[i])) break;
+    collected.push(slugs[i]);
   }
   return collected.join('/');
 }

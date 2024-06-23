@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import parseAcmsPath from './parseAcmsPath';
-import type { AcmsContext } from './types';
+import type {
+  AcmsContext,
+  AcmsPathSegments,
+  ParseAcmsPathOptions,
+} from './types';
 import { formatDate } from './utils';
 
 describe('parseAcmsPath', () => {
@@ -144,5 +148,77 @@ describe('parseAcmsPath', () => {
       '/blog/category/entry.html/2021-01-01/-/2021-12-31/tag/tag1/tag2';
     const context: AcmsContext = parseAcmsPath(path, {});
     expect(context.unresolvedPath).toBe('blog/category/entry.html');
+  });
+
+  it('should override segments with custom options', () => {
+    const options: ParseAcmsPathOptions = {
+      segments: {
+        bid: 'custom-bid',
+        cid: 'custom-cid',
+        eid: 'custom-eid',
+        uid: 'custom-uid',
+        page: 'custom-page',
+      },
+    };
+
+    const path =
+      '/custom-bid/123/custom-uid/456/custom-cid/789/custom-eid/101112/custom-page/3';
+    const context: AcmsContext = parseAcmsPath(path, options);
+
+    expect(context.bid).toBe(123);
+    expect(context.uid).toBe(456);
+    expect(context.cid).toBe(789);
+    expect(context.eid).toBe(101112);
+  });
+
+  it('should retain default segments when custom options are partially provided', () => {
+    const options = {
+      segments: {
+        tpl: 'custom-tpl',
+      },
+    };
+
+    const path = '/bid/123/custom-tpl/custom-template';
+    const context: AcmsContext = parseAcmsPath(path, options);
+
+    expect(context.bid).toBe(123);
+    expect(context.tpl).toBe('custom-template');
+  });
+
+  it('should handle default and custom segments together', () => {
+    const options = {
+      segments: {
+        tpl: 'custom-tpl',
+        field: 'custom-field',
+      },
+    };
+
+    const path = '/bid/123/custom-field/color/red/custom-tpl/sample.html';
+    const context: AcmsContext = parseAcmsPath(path, options);
+
+    expect(context.bid).toBe(123);
+    expect(context.field).toBe('color/red');
+    expect(context.tpl).toBe('sample.html');
+  });
+
+  it('should parse unresolved path correctly with custom segments', () => {
+    const options = {
+      segments: {
+        bid: 'custom-bid',
+        tpl: 'custom-tpl',
+        span: 'custom-span',
+      },
+    };
+
+    const path =
+      '/custom/path/structure/custom-bid/123/2021-01-01/custom-span/2021-12-31';
+    const context: AcmsContext = parseAcmsPath(path, options);
+
+    expect(context.bid).toBe(123);
+    expect(context.span).toEqual({
+      start: formatDate(new Date('2021-01-01')),
+      end: formatDate(new Date('2021-12-31')),
+    });
+    expect(context.unresolvedPath).toBe('custom/path/structure');
   });
 });

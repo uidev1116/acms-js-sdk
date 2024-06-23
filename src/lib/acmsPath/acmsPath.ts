@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
+import deepmerge from 'deepmerge';
 import { encodeUri, isDateString, isNumber, isString } from '../../utils';
 import { defaultAcmsPathSegments } from './defaultOptions';
-import type { AcmsContext, AcmsPathParams, AcmsPathSegments } from './types';
+import type {
+  AcmsContext,
+  AcmsPathConfig,
+  AcmsPathOptions,
+  AcmsPathParams,
+  AcmsPathSegments,
+} from './types';
 import { formatDate } from './utils';
-
-interface AcmsPathConfig {
-  segments: AcmsPathSegments;
-}
 
 const defaultOptions: AcmsPathConfig = {
   segments: defaultAcmsPathSegments,
@@ -15,12 +18,12 @@ const defaultOptions: AcmsPathConfig = {
 
 export default function acmsPath(
   paramsOrCtx: AcmsPathParams | AcmsContext,
-  options: Partial<AcmsPathConfig> = {},
+  options: AcmsPathOptions = {},
 ) {
   const params = isAcmsPathParams(paramsOrCtx)
     ? paramsOrCtx
     : toAcmsPathParams(paramsOrCtx);
-  const { segments } = { ...defaultOptions, ...options };
+  const { segments } = deepmerge(defaultOptions, options) as AcmsPathConfig;
   let path = [
     'blog',
     'admin',

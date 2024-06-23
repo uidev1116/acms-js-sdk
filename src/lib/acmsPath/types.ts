@@ -53,3 +53,24 @@ export interface AcmsPathSegments {
   tpl: string;
   api: string;
 }
+
+type RecursivePartial<T> = {
+  [P in keyof T]?: T[P] extends Array<infer U>
+    ? Array<RecursivePartial<U>>
+    : T[P] extends object
+      ? RecursivePartial<T[P]>
+      : T[P];
+};
+
+export interface AcmsPathConfig {
+  segments: AcmsPathSegments;
+}
+
+export interface ParseAcmsPathConfig {
+  segments: AcmsPathSegments;
+}
+
+export interface AcmsPathOptions extends RecursivePartial<AcmsPathConfig> {}
+
+export interface ParseAcmsPathOptions
+  extends RecursivePartial<ParseAcmsPathConfig> {}

@@ -1,60 +1,46 @@
 import { describe, expect, test } from 'vitest';
 import acmsPath from './acmsPath';
 
-describe('blog', () => {
+describe('acmsPath', () => {
   test('work with blog context', () => {
     expect(acmsPath({ blog: 'blog' })).toBe('blog/');
     expect(acmsPath({ blog: 1 })).toBe('bid/1/');
   });
-});
 
-describe('admin', () => {
   test('work with admin context', () => {
     expect(acmsPath({ admin: 'entry_index' })).toBe('admin/entry_index/');
     expect(acmsPath({ blog: 1, category: 1, admin: 'entry_edit' })).toBe(
       'bid/1/admin/entry_edit/cid/1/',
     );
   });
-});
 
-describe('category', () => {
   test('work with category context', () => {
     expect(acmsPath({ category: 'category' })).toBe('category/');
     expect(acmsPath({ category: ['hoge', 'fuga'] })).toBe('hoge/fuga/');
     expect(acmsPath({ blog: 1, category: 2 })).toBe('bid/1/cid/2/');
   });
-});
 
-describe('entry', () => {
   test('work with entry context', () => {
     expect(acmsPath({ entry: 'entry-1.html' })).toBe('entry-1.html');
     expect(acmsPath({ entry: 3 })).toBe('eid/3/');
   });
-});
 
-describe('user', () => {
   test('work with user context', () => {
     expect(acmsPath({ user: 1 })).toBe('uid/1/');
   });
-});
 
-describe('keyword', () => {
   test('work with keyword context', () => {
     expect(
       acmsPath({ blog: 'blog', category: 'category', keyword: 'keyword' }),
     ).toBe('blog/category/keyword/keyword/');
   });
-});
 
-describe('tag', () => {
   test('work with tag context', () => {
     expect(
       acmsPath({ blog: 'blog', category: 'category', tag: ['apple', 'grape'] }),
     ).toBe('blog/category/tag/apple/grape/');
   });
-});
 
-describe('span', () => {
   test('work with span context', () => {
     expect(
       acmsPath({
@@ -101,9 +87,7 @@ describe('span', () => {
       }),
     ).toThrow('Invalid end date: invalid date');
   });
-});
 
-describe('date', () => {
   test('work with date context', () => {
     expect(
       acmsPath({ blog: 'blog', category: 'category', date: { year: 2015 } }),
@@ -123,9 +107,7 @@ describe('date', () => {
       }),
     ).toBe('blog/category/2015/12/19/');
   });
-});
 
-describe('field', () => {
   test('work with field context', () => {
     expect(
       acmsPath({
@@ -135,17 +117,13 @@ describe('field', () => {
       }),
     ).toBe('blog/category/field/price/gte/1000/_and_/color/red/');
   });
-});
 
-describe('order', () => {
   test('work with order context', () => {
     expect(acmsPath({ blog: 'blog', order: 'id-asc' })).toBe(
       'blog/order/id-asc/',
     );
   });
-});
 
-describe('page', () => {
   test('work with page context', () => {
     expect(acmsPath({ blog: 'blog', category: 'category', page: 1 })).toBe(
       'blog/category/',
@@ -154,17 +132,13 @@ describe('page', () => {
       'blog/category/page/2/',
     );
   });
-});
 
-describe('limit', () => {
   test('work with limit context', () => {
     expect(acmsPath({ blog: 'blog', category: 'category', limit: 100 })).toBe(
       'blog/category/limit/100/',
     );
   });
-});
 
-describe('tpl', () => {
   test('work with tpl context', () => {
     expect(
       acmsPath({
@@ -174,17 +148,13 @@ describe('tpl', () => {
       }),
     ).toBe('blog/category/tpl/include/sample.json');
   });
-});
 
-describe('api', () => {
   test('work with api context', () => {
     expect(acmsPath({ blog: 'blog', api: 'summary_index' })).toBe(
       'blog/api/summary_index/',
     );
   });
-});
 
-describe('searchParams', () => {
   test('work with searchParams context', () => {
     expect(
       acmsPath({
@@ -202,5 +172,33 @@ describe('searchParams', () => {
         ],
       }),
     ).toBe('?foo=1&bar=2');
+  });
+
+  test('work with custom segments', () => {
+    const params = {
+      bid: 1,
+      cid: 2,
+      eid: 123,
+      tag: ['apple', 'grape'],
+      span: { start: '2022-01-01', end: '2022-12-31' },
+      page: 2,
+    };
+    const segments = {
+      bid: 'custom-bid',
+      cid: 'custom-cid',
+      eid: 'custom-eid',
+      uid: 'custom-uid',
+      page: 'custom-page',
+    };
+    const path = acmsPath(params, { segments });
+    expect(path).toContain('custom-bid/1/');
+    expect(path).toContain('custom-cid/2/');
+    expect(path).toContain('custom-eid/123/');
+    expect(path).toContain('custom-page/2/');
+    // Ensures default segments are used for those not overridden
+    expect(path).toContain('/tag/apple/grape');
+    expect(path).toContain(
+      '2022-01-01%2009%3A00%3A00/-/2022-12-31%2009%3A00%3A00/',
+    );
   });
 });
