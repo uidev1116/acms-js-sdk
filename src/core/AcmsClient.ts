@@ -9,10 +9,10 @@ import {
 import { AcmsFetchError } from '.';
 import { isAcmsFetchError } from '../lib/typeGuard';
 
-const defaultOptions: AcmsClientConfig = {
+const defaultOptions = {
   responseType: 'json',
   acmsPathOptions: {},
-};
+} as const satisfies AcmsClientConfig;
 
 export default class AcmsClient {
   private readonly baseUrl: string;
