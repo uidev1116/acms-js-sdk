@@ -12,9 +12,9 @@ import type {
 } from './types';
 import { formatDate } from './utils';
 
-const defaultOptions: AcmsPathConfig = {
+const defaultOptions = {
   segments: defaultAcmsPathSegments,
-};
+} as const satisfies AcmsPathConfig;
 
 export default function acmsPath(
   paramsOrCtx: AcmsPathParams | AcmsContext,

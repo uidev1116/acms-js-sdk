@@ -1,10 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import parseAcmsPath from './parseAcmsPath';
-import type {
-  AcmsContext,
-  AcmsPathSegments,
-  ParseAcmsPathOptions,
-} from './types';
+import type { AcmsContext, ParseAcmsPathOptions } from './types';
 import { formatDate } from './utils';
 
 describe('parseAcmsPath', () => {
