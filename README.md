@@ -230,6 +230,7 @@ const path = acmsPath({
   // limit: 10,
   // keyword: 'KEYWORD',
   // tpl: 'include/sample.json'
+  // admin: 'entry_index',
   api: 'MODULE_ID',
 });
 ```
@@ -239,6 +240,7 @@ const path = acmsPath({
 ```ts
 interface AcmsPathParams {
   blog?: string | number;
+  admin?: string;
   category?: string | string[] | number;
   entry?: string | number;
   user?: number;
