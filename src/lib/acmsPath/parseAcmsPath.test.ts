@@ -11,9 +11,9 @@ describe('parseAcmsPath', () => {
   });
 
   it('should parse template context correctly', () => {
-    const path = '/tpl/template-path';
+    const path = '/tpl/include/ajax/data.json';
     const context: AcmsContext = parseAcmsPath(path);
-    expect(context.tpl).toBe('template-path');
+    expect(context.tpl).toBe('include/ajax/data.json');
   });
 
   it('should parse span context correctly', () => {
@@ -91,6 +91,18 @@ describe('parseAcmsPath', () => {
     expect(context.date).toEqual({ year: 2023, month: 5, day: 20 });
   });
 
+  it('should parse date context with only year', () => {
+    const path = '/2023';
+    const context: AcmsContext = parseAcmsPath(path);
+    expect(context.date).toEqual({ year: 2023 });
+  });
+
+  it('should parse date context with year and month', () => {
+    const path = '/2023/05';
+    const context: AcmsContext = parseAcmsPath(path);
+    expect(context.date).toEqual({ year: 2023, month: 5 });
+  });
+
   it('should default page to 1 if not present', () => {
     const path = '/';
     const context: AcmsContext = parseAcmsPath(path);
@@ -107,18 +119,30 @@ describe('parseAcmsPath', () => {
   });
 
   it('should parse complex paths correctly', () => {
-    const path = '/bid/123/page/2/tpl/template.html';
+    const path = '/bid/123/2024/06/23/page/2/tpl/include/search.html';
     const context: AcmsContext = parseAcmsPath(path);
 
     expect(context).toEqual({
       bid: 123,
-      tpl: 'template.html',
+      date: {
+        year: 2024,
+        month: 6,
+        day: 23,
+      },
+      tpl: 'include/search.html',
       page: 2,
       span: {
-        start: '1000-01-01 00:00:00',
-        end: '9999-12-31 23:59:59',
+        start: '2024-06-23 00:00:00',
+        end: '2024-06-23 23:59:59',
       },
       unresolvedPath: '',
     });
+  });
+
+  it('should extract unresolved path correctly', () => {
+    const path =
+      '/blog/category/entry.html/2021-01-01/-/2021-12-31/tag/tag1/tag2';
+    const context: AcmsContext = parseAcmsPath(path, {});
+    expect(context.unresolvedPath).toBe('blog/category/entry.html');
   });
 });
