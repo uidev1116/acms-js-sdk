@@ -8,6 +8,15 @@ describe('blog', () => {
   });
 });
 
+describe('admin', () => {
+  test('work with admin context', () => {
+    expect(acmsPath({ admin: 'entry_index' })).toBe('admin/entry_index/');
+    expect(acmsPath({ blog: 1, category: 1, admin: 'entry_edit' })).toBe(
+      'bid/1/admin/entry_edit/cid/1/',
+    );
+  });
+});
+
 describe('category', () => {
   test('work with category context', () => {
     expect(acmsPath({ category: 'category' })).toBe('category/');

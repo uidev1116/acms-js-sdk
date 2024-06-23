@@ -23,6 +23,7 @@ export default function acmsPath(
   const { segments } = { ...defaultOptions, ...options };
   let path = [
     'blog',
+    'admin',
     'category',
     'entry',
     'user',
@@ -34,7 +35,6 @@ export default function acmsPath(
     'order',
     'limit',
     'keyword',
-    'admin',
     'tpl',
     'api',
   ].reduce((path, key) => {
