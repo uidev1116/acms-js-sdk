@@ -1,4 +1,4 @@
-import { AcmsPathOptions } from '../lib/acmsPath';
+import { AcmsPathOptions, acmsPath } from '../lib/acmsPath';
 
 export interface AcmsResponse<T> {
   data: T;
@@ -29,3 +29,5 @@ type RecursivePartial<T> = {
 };
 
 export interface AcmsClientOptions extends RecursivePartial<AcmsClientConfig> {}
+
+export type URLComposable = Parameters<typeof acmsPath>[0] | URL | string;

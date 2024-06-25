@@ -1,12 +1,13 @@
-import { acmsPath, type AcmsPathParams } from '../lib/acmsPath';
+import { acmsPath } from '../lib/acmsPath';
 import { getMessageFromResponse, isString } from '../utils';
 import createFetch, { createHeaders } from '../lib/fetch';
 import {
   type AcmsClientOptions,
   type AcmsClientConfig,
   type AcmsResponse,
+  type URLComposable,
 } from '../types';
-import { AcmsFetchError } from '.';
+import AcmsFetchError from './AcmsFetchError';
 import { isAcmsFetchError } from '../lib/typeGuard';
 
 const defaultOptions = {
@@ -51,13 +52,13 @@ export default class AcmsClient {
   }
 
   private async request<T = any>(
-    acmsPathParamsOrUrl: AcmsPathParams | URL | string,
+    urlComposable: URLComposable,
     options: AcmsClientOptions = {},
   ): Promise<AcmsResponse<T>> {
     const config: AcmsClientConfig = { ...this.config, ...options };
     const { requestInit, responseType, acmsPathOptions } = config;
     const fetch = await createFetch();
-    const url = this.createUrl(acmsPathParamsOrUrl, acmsPathOptions);
+    const url = this.createUrl(urlComposable, acmsPathOptions);
     const fetchOptions = await this.createFetchOptions(requestInit);
 
     try {
@@ -111,23 +112,23 @@ export default class AcmsClient {
   }
 
   private createUrl(
-    acmsPathParamsOrUrl: AcmsPathParams | URL | string,
+    urlComposable: URLComposable,
     options: AcmsClientConfig['acmsPathOptions'] = {},
   ) {
-    if (isString(acmsPathParamsOrUrl)) {
-      return new URL(acmsPathParamsOrUrl, this.baseUrl);
+    if (isString(urlComposable)) {
+      return new URL(urlComposable, this.baseUrl);
     }
-    if (acmsPathParamsOrUrl instanceof URL) {
-      return new URL(acmsPathParamsOrUrl, this.baseUrl);
+    if (urlComposable instanceof URL) {
+      return new URL(urlComposable, this.baseUrl);
     }
-    return new URL(acmsPath({ ...acmsPathParamsOrUrl }, options), this.baseUrl);
+    return new URL(acmsPath({ ...urlComposable }, options), this.baseUrl);
   }
 
   public async get<T = any>(
-    acmsPathParamsOrUrl: AcmsPathParams | URL | string,
+    urlComposable: URLComposable,
     options: AcmsClientOptions = {},
   ): Promise<AcmsResponse<T>> {
-    return await this.request<T>(acmsPathParamsOrUrl, {
+    return await this.request<T>(urlComposable, {
       ...options,
       requestInit: { ...options.requestInit, method: 'GET' },
     });
