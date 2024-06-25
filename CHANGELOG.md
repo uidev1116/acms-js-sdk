@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/uidev1116/acms-js-sdk/compare/v0.1.1...v0.1.2) (2024-06-25)
+
+
+### Bug Fixes
+
+* add urlComposable type ([c6d2212](https://github.com/uidev1116/acms-js-sdk/commit/c6d2212aced24a4ddb6eaa68d0ac1c42145f3c51))
+
 ## [0.1.1](https://github.com/uidev1116/acms-js-sdk/compare/v0.1.0...v0.1.1) (2024-06-23)
 
 
