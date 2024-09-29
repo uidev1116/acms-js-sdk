@@ -108,12 +108,33 @@ describe('acmsPath', () => {
     ).toBe('blog/category/2015/12/19/');
   });
 
-  test('work with field context', () => {
+  test('work with field context by string', () => {
     expect(
       acmsPath({
         blog: 'blog',
         category: 'category',
         field: 'price/gte/1000/_and_/color/red',
+      }),
+    ).toBe('blog/category/field/price/gte/1000/_and_/color/red/');
+  });
+
+  test('work with field context by acms field', () => {
+    expect(
+      acmsPath({
+        blog: 'blog',
+        category: 'category',
+        field: [
+          {
+            key: 'price',
+            filters: [{ operator: 'gte', value: 1000, connector: 'and' }],
+            separator: '_and_',
+          },
+          {
+            key: 'color',
+            filters: [{ operator: 'eq', value: 'red', connector: 'or' }],
+            separator: '_and_',
+          },
+        ],
       }),
     ).toBe('blog/category/field/price/gte/1000/_and_/color/red/');
   });

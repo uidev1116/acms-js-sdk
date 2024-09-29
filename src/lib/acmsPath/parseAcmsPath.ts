@@ -8,6 +8,7 @@ import type {
   ParseAcmsPathOptions,
 } from './types';
 import { formatDate } from './utils';
+import parseAcmsFieldString from './parseAcmsFieldString';
 
 const defaultOptions = {
   segments: defaultAcmsPathSegments,
@@ -59,10 +60,13 @@ export default function parseAcmsPath(
               context.tpl = collectSlugs(slugs, i + 1, segmentSlugs);
               i += context.tpl.split('/').length; // 次のセグメントまでスキップ
               break;
-            case 'field':
-              context.field = collectSlugs(slugs, i + 1, segmentSlugs);
-              i += context.field.split('/').length; // 次のセグメントまでスキップ
+            case 'field': {
+              const raw = collectSlugs(slugs, i + 1, segmentSlugs);
+              const parsed = parseAcmsFieldString(raw);
+              context.field = { raw, parsed };
+              i += raw.split('/').length; // 次のセグメントまでスキップ
               break;
+            }
             case 'tag':
               context.tag = collectSlugs(slugs, i + 1, segmentSlugs)
                 .split('/')

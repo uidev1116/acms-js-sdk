@@ -82,7 +82,21 @@ describe('parseAcmsPath', () => {
   it('should parse field context correctly', () => {
     const path = '/field/price/or/lt/100/100/or/nem/or/gt/300/';
     const context: AcmsContext = parseAcmsPath(path);
-    expect(context.field).toBe('price/or/lt/100/100/or/nem/or/gt/300');
+    expect(context.field).toStrictEqual({
+      raw: 'price/or/lt/100/100/or/nem/or/gt/300',
+      parsed: [
+        {
+          key: 'price',
+          filters: [
+            { operator: 'lt', value: 100, connector: 'or' },
+            { operator: 'eq', value: 100, connector: 'or' },
+            { operator: 'nem', value: '', connector: 'or' },
+            { operator: 'gt', value: 300, connector: 'or' },
+          ],
+          separator: '_and_',
+        },
+      ],
+    });
   });
 
   it('should parse date context correctly', () => {
@@ -193,7 +207,16 @@ describe('parseAcmsPath', () => {
     const context: AcmsContext = parseAcmsPath(path, options);
 
     expect(context.bid).toBe(123);
-    expect(context.field).toBe('color/red');
+    expect(context.field).toStrictEqual({
+      raw: 'color/red',
+      parsed: [
+        {
+          key: 'color',
+          filters: [{ operator: 'eq', value: 'red', connector: 'or' }],
+          separator: '_and_',
+        },
+      ],
+    });
     expect(context.tpl).toBe('sample.html');
   });
 

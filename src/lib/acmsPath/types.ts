@@ -5,7 +5,7 @@ export interface AcmsPathParams {
   entry?: string | number;
   user?: number;
   tag?: string[];
-  field?: string;
+  field?: string | AcmsField[];
   span?: { start?: string | Date; end?: string | Date };
   date?: { year?: number; month?: number; day?: number };
   page?: number;
@@ -24,7 +24,10 @@ export interface AcmsContext {
   eid?: number;
   uid?: number;
   tag?: string[];
-  field?: string;
+  field?: {
+    raw: string;
+    parsed: AcmsField[];
+  };
   span?: { start: string | Date; end: string | Date };
   date?: { year: number; month?: number; day?: number };
   page?: number;
@@ -74,3 +77,93 @@ export interface AcmsPathOptions extends RecursivePartial<AcmsPathConfig> {}
 
 export interface ParseAcmsPathOptions
   extends RecursivePartial<ParseAcmsPathConfig> {}
+
+export type Connector = 'and' | 'or';
+
+export function isConnector(value: any): value is Connector {
+  return typeof value === 'string' && ['and', 'or'].includes(value);
+}
+
+export type Operator =
+  | 'eq'
+  | 'neq'
+  | 'gt'
+  | 'lt'
+  | 'gte'
+  | 'lte'
+  | 'lk'
+  | 'nlk'
+  | 're'
+  | 'nre'
+  | 'em'
+  | 'nem';
+
+export function isOperator(value: any): value is Operator {
+  return (
+    typeof value === 'string' &&
+    [
+      'eq',
+      'neq',
+      'gt',
+      'lt',
+      'gte',
+      'lte',
+      'lk',
+      'nlk',
+      're',
+      'nre',
+      'em',
+      'nem',
+    ].includes(value)
+  );
+}
+
+export type Separator = '_and_' | '_or_';
+
+export function isSeparator(value: any): value is Separator {
+  return typeof value === 'string' && ['_and_', '_or_'].includes(value);
+}
+
+export interface AcmsFieldFilter {
+  operator: Operator;
+  value: string | number;
+  connector: Connector;
+}
+
+export function isAcmsFieldFilter(value: any): value is AcmsFieldFilter {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    isOperator(value.operator) &&
+    (typeof value.value === 'string' || typeof value.value === 'number') &&
+    isConnector(value.connector)
+  );
+}
+
+export interface AcmsField {
+  key: string;
+  filters: AcmsFieldFilter[];
+  separator?: Separator;
+}
+
+export function isAcmsField(value: any): value is AcmsField {
+  if (typeof value !== 'object') {
+    return false;
+  }
+  if (value == null) {
+    return false;
+  }
+  if (typeof value.key !== 'string') {
+    return false;
+  }
+  if (!Array.isArray(value.filters)) {
+    return false;
+  }
+  if (!(value.filters as any[]).every(isAcmsFieldFilter)) {
+    return false;
+  }
+  if (value.separator !== undefined && !isSeparator(value.separator)) {
+    return false;
+  }
+  return true;
+}

@@ -3,14 +3,15 @@
 import deepmerge from 'deepmerge';
 import { encodeUri, isDateString, isNumber, isString } from '../../utils';
 import { defaultAcmsPathSegments } from './defaultOptions';
-import type {
-  AcmsContext,
-  AcmsPathConfig,
-  AcmsPathOptions,
-  AcmsPathParams,
-  AcmsPathSegments,
+import {
+  type AcmsContext,
+  type AcmsPathConfig,
+  type AcmsPathOptions,
+  type AcmsPathParams,
+  type AcmsPathSegments,
 } from './types';
 import { formatDate } from './utils';
+import stringifyAcmsFieldCollection from './stringifyAcmsFieldCollection';
 
 const defaultOptions = {
   segments: defaultAcmsPathSegments,
@@ -80,6 +81,12 @@ export default function acmsPath(
 
     if (key === 'field') {
       const param = params[key]!;
+      if (Array.isArray(param)) {
+        return `${path}/${segments.field}/${stringifyAcmsFieldCollection(param)
+          .split('/')
+          .map(encodeUri)
+          .join('/')}`;
+      }
       return `${path}/${segments.field}/${param
         .split('/')
         .map(encodeUri)
@@ -190,7 +197,7 @@ function toAcmsPathParams(context: AcmsContext): AcmsPathParams {
     entry: context.eid,
     user: context.uid,
     tag: context.tag,
-    field: context.field,
+    field: context.field?.raw,
     span: context.span,
     date: context.date,
     page: context.page,
