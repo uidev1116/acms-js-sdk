@@ -52,6 +52,9 @@ export default function acmsPath(
       if (isNumber(param)) {
         return `${path}/${segments.bid}/${param}`;
       }
+      if (param === '') {
+        return path;
+      }
       return `${path}/${param.split('/').map(encodeUri).join('/')}`;
     }
 
@@ -63,6 +66,9 @@ export default function acmsPath(
       if (Array.isArray(param)) {
         return `${path}/${param.map(encodeUri).join('/')}`;
       }
+      if (param === '') {
+        return path;
+      }
       return `${path}/${encodeUri(param)}`;
     }
 
@@ -70,6 +76,9 @@ export default function acmsPath(
       const param = params[key]!;
       if (isNumber(param)) {
         return `${path}/${segments.eid}/${param}`;
+      }
+      if (param === '') {
+        return path;
       }
       return `${path}/${encodeUri(param)}`;
     }
@@ -79,6 +88,11 @@ export default function acmsPath(
       return `${path}/${segments.uid}/${param}`;
     }
 
+    if (key === 'unit') {
+      const param = params[key]!;
+      return `${path}/${segments.utid}/${param}`;
+    }
+
     if (key === 'field') {
       const param = params[key]!;
       if (Array.isArray(param)) {
@@ -86,6 +100,9 @@ export default function acmsPath(
           .split('/')
           .map(encodeUri)
           .join('/')}`;
+      }
+      if (param === '') {
+        return path;
       }
       return `${path}/${segments.field}/${param
         .split('/')
@@ -118,7 +135,7 @@ export default function acmsPath(
         if (param == null) {
           return path;
         }
-        return `${path}/${param}`;
+        return `${path}/${twoDigits(param)}`;
       }, path);
     }
 
@@ -129,6 +146,9 @@ export default function acmsPath(
 
     if (key === 'tpl') {
       const param = params[key]!;
+      if (param === '') {
+        return path;
+      }
       return `${path}/${segments.tpl}/${param
         .split('/')
         .map(encodeUri)
@@ -145,9 +165,12 @@ export default function acmsPath(
         : path;
     }
 
-    return `${path}/${segments[key as keyof AcmsPathSegments]}/${encodeUri(
-      param as string | number,
-    )}`;
+    if (param !== '') {
+      return `${path}/${segments[key as keyof AcmsPathSegments]}/${encodeUri(
+        param as string | number,
+      )}`;
+    }
+    return path;
   }, '');
 
   if (!/\.[^/.]+$/.test(path)) {
@@ -184,6 +207,10 @@ function isAcmsPathParams(
     return true;
   }
 
+  if ('unit' in params) {
+    return true;
+  }
+
   if ('searchParams' in params) {
     return true;
   }
@@ -196,6 +223,7 @@ function toAcmsPathParams(context: AcmsContext): AcmsPathParams {
     category: context.cid,
     entry: context.eid,
     user: context.uid,
+    unit: context.utid,
     tag: context.tag,
     field: context.field?.raw,
     span: context.span,
@@ -208,4 +236,8 @@ function toAcmsPathParams(context: AcmsContext): AcmsPathParams {
     tpl: context.tpl,
     api: context.api,
   };
+}
+
+function twoDigits(num: number) {
+  return num < 10 ? `0${num}` : num;
 }

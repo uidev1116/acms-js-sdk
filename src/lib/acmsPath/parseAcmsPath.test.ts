@@ -49,6 +49,12 @@ describe('parseAcmsPath', () => {
     expect(context.eid).toBe(101112);
   });
 
+  it('should parse unit context correctly', () => {
+    const path = '/utid/101112';
+    const context: AcmsContext = parseAcmsPath(path);
+    expect(context.utid).toBe(101112);
+  });
+
   it('should parse page context correctly', () => {
     const path = '/page/3';
     const context: AcmsContext = parseAcmsPath(path);

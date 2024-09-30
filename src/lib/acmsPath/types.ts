@@ -4,6 +4,7 @@ export interface AcmsPathParams {
   category?: string | string[] | number;
   entry?: string | number;
   user?: number;
+  unit?: number;
   tag?: string[];
   field?: string | AcmsField[];
   span?: { start?: string | Date; end?: string | Date };
@@ -23,6 +24,7 @@ export interface AcmsContext {
   cid?: number;
   eid?: number;
   uid?: number;
+  utid?: number;
   tag?: string[];
   field?: {
     raw: string;
@@ -46,6 +48,7 @@ export interface AcmsPathSegments {
   cid: string;
   eid: string;
   uid: string;
+  utid: string;
   tag: string;
   field: string;
   span: string;

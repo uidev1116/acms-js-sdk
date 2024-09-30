@@ -220,4 +220,18 @@ describe('acmsPath', () => {
     expect(path).toContain('/tag/apple/grape');
     expect(path).toContain('/order/id-asc');
   });
+
+  test('work with empty params', () => {
+    const params = {
+      blog: '',
+      category: '',
+      entry: '',
+      keyword: '',
+      field: '',
+      order: '',
+      tpl: '',
+    };
+    const path = acmsPath(params);
+    expect(path).toContain('');
+  });
 });

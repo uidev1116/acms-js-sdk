@@ -1,3 +1,4 @@
+import { encodeUri } from '../../utils';
 import { type AcmsField } from './types';
 
 export default function stringifyAcmsFieldCollection(
@@ -97,5 +98,5 @@ export default function stringifyAcmsFieldCollection(
   }
 
   // スラッシュで結合して文字列を返す
-  return queries.join('/');
+  return queries.map(encodeUri).join('/');
 }

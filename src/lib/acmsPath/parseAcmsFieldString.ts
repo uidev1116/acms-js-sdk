@@ -9,10 +9,10 @@ import {
   type Connector,
   isAcmsFieldFilter,
 } from './types';
+import { splitPath } from './utils';
 
 export default function parseAcmsFieldString(input: string): AcmsField[] {
-  // 末尾の不要な '/' を削除
-  const tokens = input.replace(/\/$/, '').split(/(?<!\\)\//);
+  const tokens = splitPath(input);
 
   let filter: Partial<AcmsFieldFilter> = {};
   let key: string | null = null;

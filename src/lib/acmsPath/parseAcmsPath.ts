@@ -7,7 +7,7 @@ import type {
   ParseAcmsPathConfig,
   ParseAcmsPathOptions,
 } from './types';
-import { formatDate } from './utils';
+import { formatDate, splitPath } from './utils';
 import parseAcmsFieldString from './parseAcmsFieldString';
 
 const defaultOptions = {
@@ -24,7 +24,7 @@ export default function parseAcmsPath(
     options,
   ) as ParseAcmsPathConfig;
 
-  const slugs = path.split('/').filter((segment) => segment);
+  const slugs = splitPath(path).filter((segment) => segment);
   const context: AcmsContext = {};
   const unresolvedSlugs = [];
   const segmentKeys = Object.keys(segments);
@@ -45,6 +45,7 @@ export default function parseAcmsPath(
             case 'uid':
             case 'cid':
             case 'eid':
+            case 'utid':
             case 'page':
             case 'limit':
               context[segmentKey] = parseInt(value, 10);

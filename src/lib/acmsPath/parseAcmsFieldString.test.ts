@@ -305,4 +305,22 @@ describe('parseAcmsFieldString', () => {
     ];
     expect(parseAcmsFieldString(input)).toEqual(expected);
   });
+
+  it('should handle escaped value', () => {
+    const input = 'kataban/eq/PDW-850\\/1 SYM';
+    const expected: AcmsField[] = [
+      {
+        key: 'kataban',
+        filters: [
+          {
+            operator: 'eq',
+            value: 'PDW-850\\/1 SYM',
+            connector: 'or',
+          },
+        ],
+        separator: '_and_',
+      },
+    ];
+    expect(parseAcmsFieldString(input)).toEqual(expected);
+  });
 });
