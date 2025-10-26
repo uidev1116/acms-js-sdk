@@ -50,9 +50,9 @@ describe('parseAcmsPath', () => {
   });
 
   it('should parse unit context correctly', () => {
-    const path = '/utid/101112';
+    const path = '/utid/123e4567-e89b-12d3-a456-426614174000';
     const context: AcmsContext = parseAcmsPath(path);
-    expect(context.utid).toBe(101112);
+    expect(context.utid).toBe('123e4567-e89b-12d3-a456-426614174000');
   });
 
   it('should parse page context correctly', () => {
@@ -88,21 +88,21 @@ describe('parseAcmsPath', () => {
   it('should parse field context correctly', () => {
     const path = '/field/price/or/lt/100/100/or/nem/or/gt/300/';
     const context: AcmsContext = parseAcmsPath(path);
-    expect(context.field).toStrictEqual({
-      raw: 'price/or/lt/100/100/or/nem/or/gt/300',
-      parsed: [
-        {
-          key: 'price',
-          filters: [
-            { operator: 'lt', value: 100, connector: 'or' },
-            { operator: 'eq', value: 100, connector: 'or' },
-            { operator: 'nem', value: '', connector: 'or' },
-            { operator: 'gt', value: 300, connector: 'or' },
-          ],
-          separator: '_and_',
-        },
-      ],
-    });
+    expect(context.field?.toString()).toBe(
+      'price/or/lt/100/100/or/nem/or/gt/300',
+    );
+    expect(context.field?.getFields()).toStrictEqual([
+      {
+        key: 'price',
+        filters: [
+          { operator: 'lt', value: '100', connector: 'or' },
+          { operator: 'eq', value: '100', connector: 'or' },
+          { operator: 'nem', value: '', connector: 'or' },
+          { operator: 'gt', value: '300', connector: 'or' },
+        ],
+        separator: '_and_',
+      },
+    ]);
   });
 
   it('should parse date context correctly', () => {
@@ -213,16 +213,13 @@ describe('parseAcmsPath', () => {
     const context: AcmsContext = parseAcmsPath(path, options);
 
     expect(context.bid).toBe(123);
-    expect(context.field).toStrictEqual({
-      raw: 'color/red',
-      parsed: [
-        {
-          key: 'color',
-          filters: [{ operator: 'eq', value: 'red', connector: 'or' }],
-          separator: '_and_',
-        },
-      ],
-    });
+    expect(context.field?.getFields()).toStrictEqual([
+      {
+        key: 'color',
+        filters: [{ operator: 'eq', value: 'red', connector: 'or' }],
+        separator: '_and_',
+      },
+    ]);
     expect(context.tpl).toBe('sample.html');
   });
 

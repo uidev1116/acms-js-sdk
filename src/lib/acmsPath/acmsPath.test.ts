@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import acmsPath from './acmsPath';
+import AcmsFieldList from './acmsField';
 
 describe('acmsPath', () => {
   test('work with blog context', () => {
@@ -123,10 +124,10 @@ describe('acmsPath', () => {
       acmsPath({
         blog: 'blog',
         category: 'category',
-        field: [
+        field: new AcmsFieldList([
           {
             key: 'price',
-            filters: [{ operator: 'gte', value: 1000, connector: 'and' }],
+            filters: [{ operator: 'gte', value: '1000', connector: 'and' }],
             separator: '_and_',
           },
           {
@@ -134,7 +135,7 @@ describe('acmsPath', () => {
             filters: [{ operator: 'eq', value: 'red', connector: 'or' }],
             separator: '_and_',
           },
-        ],
+        ]),
       }),
     ).toBe('blog/category/field/price/gte/1000/_and_/color/red/');
   });
@@ -179,20 +180,12 @@ describe('acmsPath', () => {
   test('work with searchParams context', () => {
     expect(
       acmsPath({
-        searchParams: new URLSearchParams({ keyword: 'a-blog cms' }),
+        searchParams: { keyword: 'a-blog cms' },
       }),
     ).toBe('?keyword=a-blog+cms');
     expect(acmsPath({ searchParams: { foo: '1', bar: '2' } })).toBe(
       '?foo=1&bar=2',
     );
-    expect(
-      acmsPath({
-        searchParams: [
-          ['foo', '1'],
-          ['bar', '2'],
-        ],
-      }),
-    ).toBe('?foo=1&bar=2');
   });
 
   test('work with custom segments', () => {
@@ -233,5 +226,41 @@ describe('acmsPath', () => {
     };
     const path = acmsPath(params);
     expect(path).toContain('');
+  });
+
+  test('field context should be empty when field is empty', () => {
+    const params = {
+      bid: 1,
+      cid: 2,
+      field: new AcmsFieldList([]),
+    };
+    const path = acmsPath(params);
+    expect(path).toBe('bid/1/cid/2/');
+  });
+
+  test('NaN should be ignored', () => {
+    const params = {
+      bid: NaN,
+      cid: NaN,
+      eid: NaN,
+      uid: NaN,
+      page: NaN,
+      limit: NaN,
+    };
+    const path = acmsPath(params);
+    expect(path).toBe('');
+  });
+
+  test('0 should be ignored', () => {
+    const params = {
+      bid: 0,
+      cid: 0,
+      eid: 0,
+      uid: 0,
+      page: 0,
+      limit: 0, // 0 is valid
+    };
+    const path = acmsPath(params);
+    expect(path).toBe('limit/0/');
   });
 });

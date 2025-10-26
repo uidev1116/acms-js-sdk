@@ -1,6 +1,6 @@
 export function formatDate(date: Date) {
   function twoDigits(num: number) {
-    return num < 10 ? '0' + num : num;
+    return num < 10 ? `0${num}` : num;
   }
 
   const year = date.getFullYear();
@@ -20,10 +20,8 @@ export function splitPath(path: string): string[] {
   const result: string[] = [];
   let buffer: string = '';
   let isEscaped: boolean = false;
-
   for (let i = 0; i < path.length; i++) {
     const char = path[i];
-
     if (char === '\\' && !isEscaped) {
       // バックスラッシュを見つけたらエスケープ状態にする
       isEscaped = true;
@@ -38,11 +36,9 @@ export function splitPath(path: string): string[] {
       isEscaped = false; // 1文字進んだらエスケープ状態を解除
     }
   }
-
   // 最後の部分を追加
   if (buffer.length > 0) {
     result.push(buffer);
   }
-
   return result;
 }

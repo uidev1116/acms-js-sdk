@@ -1,12 +1,14 @@
-// To-do: fieldをより簡単に書けるようにする
+import type { RecursivePartial } from '../../types';
+import type AcmsFieldList from './acmsField';
+
 export interface AcmsPathParams {
   blog?: string | number;
   category?: string | string[] | number;
   entry?: string | number;
   user?: number;
-  unit?: number;
+  unit?: string;
   tag?: string[];
-  field?: string | AcmsField[];
+  field?: string | AcmsFieldList;
   span?: { start?: string | Date; end?: string | Date };
   date?: { year?: number; month?: number; day?: number };
   page?: number;
@@ -16,7 +18,7 @@ export interface AcmsPathParams {
   admin?: string;
   tpl?: string;
   api?: string;
-  searchParams?: ConstructorParameters<typeof URLSearchParams>[0];
+  searchParams?: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export interface AcmsContext {
@@ -24,12 +26,9 @@ export interface AcmsContext {
   cid?: number;
   eid?: number;
   uid?: number;
-  utid?: number;
+  utid?: string;
   tag?: string[];
-  field?: {
-    raw: string;
-    parsed: AcmsField[];
-  };
+  field?: AcmsFieldList;
   span?: { start: string | Date; end: string | Date };
   date?: { year: number; month?: number; day?: number };
   page?: number;
@@ -40,6 +39,11 @@ export interface AcmsContext {
   tpl?: string;
   api?: string;
   unresolvedPath?: string;
+}
+
+export interface AcmsContextWithSearchParams extends AcmsContext {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  searchParams?: Record<string, any> | URLSearchParams;
 }
 
 export interface AcmsPathSegments {
@@ -60,14 +64,6 @@ export interface AcmsPathSegments {
   api: string;
 }
 
-type RecursivePartial<T> = {
-  [P in keyof T]?: T[P] extends Array<infer U>
-    ? Array<RecursivePartial<U>>
-    : T[P] extends object
-      ? RecursivePartial<T[P]>
-      : T[P];
-};
-
 export interface AcmsPathConfig {
   segments: AcmsPathSegments;
 }
@@ -83,6 +79,7 @@ export interface ParseAcmsPathOptions
 
 export type Connector = 'and' | 'or';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isConnector(value: any): value is Connector {
   return typeof value === 'string' && ['and', 'or'].includes(value);
 }
@@ -101,6 +98,7 @@ export type Operator =
   | 'em'
   | 'nem';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isOperator(value: any): value is Operator {
   return (
     typeof value === 'string' &&
@@ -123,17 +121,19 @@ export function isOperator(value: any): value is Operator {
 
 export type Separator = '_and_' | '_or_';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isSeparator(value: any): value is Separator {
   return typeof value === 'string' && ['_and_', '_or_'].includes(value);
 }
 
-export interface AcmsFieldFilter {
+export interface AcmsFilter {
   operator: Operator;
-  value: string | number;
+  value: string;
   connector: Connector;
 }
 
-export function isAcmsFieldFilter(value: any): value is AcmsFieldFilter {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function isAcmsFilter(value: any): value is AcmsFilter {
   return (
     typeof value === 'object' &&
     value !== null &&
@@ -145,10 +145,11 @@ export function isAcmsFieldFilter(value: any): value is AcmsFieldFilter {
 
 export interface AcmsField {
   key: string;
-  filters: AcmsFieldFilter[];
+  filters: AcmsFilter[];
   separator?: Separator;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isAcmsField(value: any): value is AcmsField {
   if (typeof value !== 'object') {
     return false;
@@ -162,7 +163,8 @@ export function isAcmsField(value: any): value is AcmsField {
   if (!Array.isArray(value.filters)) {
     return false;
   }
-  if (!(value.filters as any[]).every(isAcmsFieldFilter)) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (!(value.filters as any[]).every(isAcmsFilter)) {
     return false;
   }
   if (value.separator !== undefined && !isSeparator(value.separator)) {
