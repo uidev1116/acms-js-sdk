@@ -5,6 +5,7 @@ export const defaultAcmsPathSegments = {
   cid: 'cid',
   eid: 'eid',
   uid: 'uid',
+  utid: 'utid',
   tag: 'tag',
   field: 'field',
   span: '-',

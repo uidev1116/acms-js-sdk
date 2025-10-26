@@ -20,7 +20,7 @@ export interface AcmsClientConfig {
   acmsPathOptions?: AcmsPathOptions;
 }
 
-type RecursivePartial<T> = {
+export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends Array<infer U>
     ? Array<RecursivePartial<U>>
     : T[P] extends object
