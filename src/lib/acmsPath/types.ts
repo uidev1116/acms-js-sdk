@@ -72,8 +72,10 @@ export interface ParseAcmsPathConfig {
   segments: AcmsPathSegments;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface AcmsPathOptions extends RecursivePartial<AcmsPathConfig> {}
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ParseAcmsPathOptions
   extends RecursivePartial<ParseAcmsPathConfig> {}
 

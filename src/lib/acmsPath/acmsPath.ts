@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { stringify } from 'qs';
 import { encodeUri } from '../../utils';
 import { isNumber, isString } from '../../utils/typeGuard';

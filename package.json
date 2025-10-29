@@ -40,41 +40,44 @@
     "test:ci": "vitest run",
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "lint": "eslint src --ext .ts,.js",
+    "lint:fix": "eslint src --ext .ts,.js --fix",
     "check-update": "npx -p npm-check-updates -c ncu",
     "prepare": "husky install",
     "prepack": "npm run test:ci && npm run build"
   },
   "dependencies": {
-    "cross-fetch": "^4.0.0",
+    "cross-fetch": "^4.1.0",
     "qs": "^6.14.0"
   },
   "devDependencies": {
-    "@types/node": "^20.10.7",
+    "@types/node": "^24.9.1",
     "@types/qs": "^6.14.0",
-    "@typescript-eslint/eslint-plugin": "^6.18.0",
-    "@typescript-eslint/parser": "^6.18.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
     "co": "^4.6.0",
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-config-standard-with-typescript": "^43.0.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^16.6.1",
-    "eslint-plugin-promise": "^6.1.1",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.2.0",
+    "eslint": "^9.38.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-n": "^17.23.1",
+    "eslint-plugin-promise": "^7.2.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
     "node-cmd": "^5.0.0",
-    "prettier": "^3.1.1",
-    "typescript": "^5.3.3",
-    "vite": "^5.0.11",
-    "vite-plugin-dts": "^3.7.0",
-    "vite-plugin-eslint": "^1.8.1",
-    "vitest": "^2.1.1"
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.0.3"
   },
   "volta": {
     "node": "20.11.1"
   },
   "lint-staged": {
-    "*.{js,ts}": "prettier --write"
+    "*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "tags": [
     "a-blog cms"

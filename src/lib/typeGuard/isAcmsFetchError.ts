@@ -9,6 +9,7 @@ import AcmsFetchError from '../../core/AcmsFetchError';
  * @returns {boolean} True if the payload is an error thrown by acms-js-sdk, otherwise false
  */
 export default function isAcmsFetchError(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any,
 ): payload is AcmsFetchError {
   return isObject(payload) && payload instanceof AcmsFetchError;

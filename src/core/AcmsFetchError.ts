@@ -1,5 +1,6 @@
 import { type AcmsResponse } from '../types';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default class AcmsFetchError<T = any> extends Error {
   public code: string;
   public response: AcmsResponse<T>;

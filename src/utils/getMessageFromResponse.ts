@@ -6,6 +6,7 @@ export default async function getMessageFromResponse(
   try {
     const { message } = await response.json();
     return message ?? null;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_) {
     return null;
   }
