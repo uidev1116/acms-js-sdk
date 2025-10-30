@@ -71,7 +71,7 @@
     "vitest": "^4.0.4"
   },
   "volta": {
-    "node": "20.11.1"
+    "node": "24.11.0"
   },
   "lint-staged": {
     "*.{js,ts}": [
