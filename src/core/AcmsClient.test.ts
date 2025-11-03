@@ -54,4 +54,34 @@ describe('AcmsClient', () => {
       },
     });
   });
+
+  // API version のテスト（v1）
+  it('properly sets apiVersion in acmsPathOptions to v1', () => {
+    const client = new AcmsClient({
+      baseUrl: 'https://api.example.com',
+      apiKey: '123456',
+      acmsPathOptions: {
+        apiVersion: 'v1',
+      },
+    });
+
+    expect(client.getConfig().acmsPathOptions).toEqual({
+      apiVersion: 'v1',
+    });
+  });
+
+  // API version のテスト（v2）
+  it('properly sets apiVersion in acmsPathOptions to v2', () => {
+    const client = new AcmsClient({
+      baseUrl: 'https://api.example.com',
+      apiKey: '123456',
+      acmsPathOptions: {
+        apiVersion: 'v2',
+      },
+    });
+
+    expect(client.getConfig().acmsPathOptions).toEqual({
+      apiVersion: 'v2',
+    });
+  });
 });
