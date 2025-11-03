@@ -33,7 +33,8 @@ This is the **acms-js-sdk** - a JavaScript SDK for a-blog cms that works in Node
 1. **AcmsClient** (`src/core/AcmsClient.ts`): Main client class that handles API requests to a-blog cms
 2. **acmsPath** (`src/lib/acmsPath/acmsPath.ts`): Constructs a-blog cms URL paths with context (blog, category, entry, etc.)
 3. **parseAcmsPath** (`src/lib/acmsPath/parseAcmsPath.ts`): Parses a-blog cms URL paths into structured context objects
-4. **Type Guards** (`src/lib/typeGuard/`): Utilities for runtime type checking
+4. **AcmsFieldList** (`src/lib/acmsPath/acmsField.ts`): Class for building and parsing field filter contexts
+5. **Type Guards** (`src/lib/typeGuard/`): Utilities for runtime type checking
 
 ### Build System
 
@@ -55,7 +56,7 @@ Outputs both ESM and CommonJS formats with TypeScript declarations.
 - **ESLint** with TypeScript support using `standard-with-typescript` and Prettier
 - **Husky** for git hooks with lint-staged for pre-commit formatting
 - **TypeScript** with strict mode enabled
-- Supports Node.js 20.11.1 (specified in volta config)
+- Supports Node.js >=18.0.0 (volta config specifies 24.11.0)
 
 ## Key Patterns
 
@@ -63,7 +64,7 @@ Outputs both ESM and CommonJS formats with TypeScript declarations.
 The SDK creates clients that interact with a-blog cms modules using URL contexts like blog codes, category codes, and entry codes.
 
 ### URL Context Handling
-The `acmsPath` function handles complex URL construction for a-blog cms, supporting various context parameters like blog, category, entry, user, tags, fields, pagination, etc.
+The `acmsPath` function handles complex URL construction for a-blog cms, supporting various context parameters like blog, category, entry, user, unit, tags, fields, pagination, etc. It also supports API version specification (v1 or v2) through the `apiVersion` option.
 
 ### Error Handling
 Custom `AcmsFetchError` class for API errors with type guard `isAcmsFetchError` for proper error handling in applications.
@@ -71,14 +72,56 @@ Custom `AcmsFetchError` class for API errors with type guard `isAcmsFetchError` 
 ### Type Safety
 Extensive TypeScript types for API responses, client configuration, and URL context parameters.
 
-## Working with ACMS Field Helper
+### API Version Support
+The SDK supports both v1 and v2 API versions:
+- **Default**: v2 (generates paths like `api/v2/MODULE_ID/`)
+- **v1**: Legacy format (generates paths like `api/MODULE_ID/`)
+- Configurable via `acmsPathOptions.apiVersion` in `createClient()` or per-request in `acmsPath()`
+- `parseAcmsPath()` automatically detects and returns the API version from paths
 
-Recent additions include `AcmsFieldList` class for handling field contexts and functions for parsing/stringifying ACMS field collections. When working with fields:
+## Working with AcmsFieldList
 
-- Use `parseAcmsFieldString` for converting field strings to structured data
-- Use `stringifyAcmsFieldCollection` for the reverse operation
-- Field context includes escape handling and utid support
+The `AcmsFieldList` class provides a powerful interface for handling field filter contexts in a-blog cms:
+
+### Main Methods
+
+- **`AcmsFieldList.fromString(input: string)`**: Parse field strings into structured `AcmsFieldList` instances
+- **`toString()`**: Convert `AcmsFieldList` back to a-blog cms field path string format
+- **`AcmsFieldList.fromFormData(formData: FormData)`**: Create from FormData for form processing
+- **`getFields()`**: Get all fields as an array of `AcmsField` objects
+- **`push()`, `pop()`, `shift()`, `unshift()`**: Array-like manipulation methods
+
+### Field Structure
+
+Fields consist of:
+- **key**: The field name
+- **filters**: Array of filter conditions with operator, value, and connector
+- **separator**: How fields are combined (`'_and_'` or `'_or_'`)
+
+### Operators
+
+Supported operators: `eq`, `neq`, `gt`, `lt`, `gte`, `lte`, `lk`, `nlk`, `re`, `nre`, `em`, `nem`
+
+### Usage Patterns
+
+1. **String format**: `'color/eq/red/_and_/size/gte/10'`
+2. **Programmatic**: Pass `AcmsFieldList` instance to `acmsPath()` or client methods
+3. **Parsing**: Use `parseAcmsPath()` which returns field as `AcmsFieldList` instance
 
 ## Distribution
 
-The package is published as `@uidev1116/acms-js-sdk` with multiple export points for different use cases (main SDK, path utilities, type guards).
+The package is published as `@uidev1116/acms-js-sdk` with multiple export points:
+
+### Main Exports (`@uidev1116/acms-js-sdk`)
+- `createClient`: Factory function to create an AcmsClient instance
+- `acmsPath`: URL path builder function
+- `parseAcmsPath`: URL path parser function
+- `AcmsFieldList`: Class for field filter manipulation
+- `isAcmsFetchError`: Type guard for AcmsFetchError
+- Type definitions for all interfaces and types
+
+### Sub-exports
+- `@uidev1116/acms-js-sdk/acmsPath`: Standalone path utilities (acmsPath, parseAcmsPath, AcmsFieldList, types)
+- `@uidev1116/acms-js-sdk/typeGuard`: Type guard utilities (isAcmsFetchError)
+
+All exports support both ESM and CommonJS formats with full TypeScript type definitions.
