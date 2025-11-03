@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.0](https://github.com/uidev1116/acms-js-sdk/compare/v0.2.0...v0.3.0) (2025-11-03)
+
+
+### Features
+
+* add API versioning support and export AcmsFieldList class ([bcb11f2](https://github.com/uidev1116/acms-js-sdk/commit/bcb11f2247624b94f2240666f38da508a91213e3))
+* migrate dependencies and modernize ESLint configuration ([5e45e48](https://github.com/uidev1116/acms-js-sdk/commit/5e45e4811dfbc6fd7ed2ebc144e86767a3973c69))
+
 ## [0.2.0](https://github.com/uidev1116/acms-js-sdk/compare/v0.1.2...v0.2.0) (2025-10-26)
 
 
