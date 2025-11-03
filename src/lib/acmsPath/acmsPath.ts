@@ -70,6 +70,7 @@ function twoDigits(num: number) {
 
 const defaultOptions = {
   segments: defaultAcmsPathSegments,
+  apiVersion: 'v2',
 } as const satisfies AcmsPathConfig;
 
 export default function acmsPath(
@@ -79,7 +80,10 @@ export default function acmsPath(
   const params = isAcmsPathParams(paramsOrCtx)
     ? paramsOrCtx
     : toAcmsPathParams(paramsOrCtx);
-  const { segments } = mergeConfig(defaultOptions, options) as AcmsPathConfig;
+  const { segments, apiVersion } = mergeConfig(
+    defaultOptions,
+    options,
+  ) as AcmsPathConfig;
   let path = [
     'blog',
     'admin',
@@ -227,6 +231,15 @@ export default function acmsPath(
         .split('/')
         .map(encodeUri)
         .join('/')}`;
+    }
+
+    if (key === 'api') {
+      const param = params[key]!;
+      if (param === '') {
+        return path;
+      }
+      const versionPath = apiVersion === 'v1' ? '' : `/${apiVersion}`;
+      return `${path}/${segments.api}${versionPath}/${encodeUri(param)}`;
     }
 
     if (Array.isArray(param)) {

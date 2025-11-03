@@ -1,6 +1,8 @@
 import type { RecursivePartial } from '../../types';
 import type AcmsFieldList from './acmsField';
 
+export type ApiVersion = 'v1' | 'v2';
+
 export interface AcmsPathParams {
   blog?: string | number;
   category?: string | string[] | number;
@@ -38,6 +40,7 @@ export interface AcmsContext {
   admin?: string;
   tpl?: string;
   api?: string;
+  apiVersion?: ApiVersion;
   unresolvedPath?: string;
 }
 
@@ -66,6 +69,7 @@ export interface AcmsPathSegments {
 
 export interface AcmsPathConfig {
   segments: AcmsPathSegments;
+  apiVersion?: ApiVersion;
 }
 
 export interface ParseAcmsPathConfig {

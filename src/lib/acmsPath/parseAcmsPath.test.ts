@@ -74,9 +74,25 @@ describe('parseAcmsPath', () => {
   });
 
   it('should parse API context correctly', () => {
+    // v1 path (no version)
     const path = '/api/module_id';
     const context: AcmsContext = parseAcmsPath(path);
     expect(context.api).toBe('module_id');
+    expect(context.apiVersion).toBe('v1');
+  });
+
+  it('should parse API context with v2 correctly', () => {
+    const path = '/api/v2/module_id';
+    const context: AcmsContext = parseAcmsPath(path);
+    expect(context.api).toBe('module_id');
+    expect(context.apiVersion).toBe('v2');
+  });
+
+  it('should parse API context with other versions correctly', () => {
+    const path = '/api/v3/module_id';
+    const context: AcmsContext = parseAcmsPath(path);
+    expect(context.api).toBe('module_id');
+    expect(context.apiVersion).toBe('v3');
   });
 
   it('should parse keyword context correctly', () => {
@@ -242,5 +258,16 @@ describe('parseAcmsPath', () => {
       end: formatDate(new Date('2021-12-31')),
     });
     expect(context.unresolvedPath).toBe('custom/path/structure');
+  });
+
+  it('should parse complex path with versioned API correctly', () => {
+    const path = '/bid/123/cid/456/api/v2/entry_list/page/2';
+    const context: AcmsContext = parseAcmsPath(path);
+
+    expect(context.bid).toBe(123);
+    expect(context.cid).toBe(456);
+    expect(context.api).toBe('entry_list');
+    expect(context.apiVersion).toBe('v2');
+    expect(context.page).toBe(2);
   });
 });
