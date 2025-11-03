@@ -290,7 +290,7 @@ export default class AcmsFieldList {
             connector,
           };
         }
-        // eslint-disable-next-line no-loop-func
+
         const current = fields.find((field) => field.key === key);
         if (current !== undefined && isAcmsFilter(filter)) {
           current.filters = [...current.filters, filter];
@@ -307,10 +307,7 @@ export default class AcmsFieldList {
   }
 
   public static fromFormData(formData: FormData): AcmsFieldList {
-    const data = parseFormData(formData) as {
-      field?: string[];
-      [key: string]: any;
-    }; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = parseFormData(formData);
     if (!Array.isArray(data.field)) {
       return new AcmsFieldList();
     }
@@ -328,10 +325,16 @@ export default class AcmsFieldList {
       const separatorKey = `${fieldName}@separator`;
       const valueKey = fieldName;
 
-      const operators = data[operatorKey] || [];
-      const connectors = data[connectorKey] || [];
-      const values = data[valueKey] || [];
-      const separator = data[separatorKey] || '_and_';
+      const operators = Array.isArray(data[operatorKey])
+        ? data[operatorKey]
+        : [];
+      const connectors = Array.isArray(data[connectorKey])
+        ? data[connectorKey]
+        : [];
+      const values = Array.isArray(data[valueKey]) ? data[valueKey] : [];
+      const separator = isSeparator(data[separatorKey])
+        ? data[separatorKey]
+        : '_and_';
 
       const count = Math.max(
         operators.length,
@@ -348,22 +351,22 @@ export default class AcmsFieldList {
       if (connectors.length === 0 && operators.length === 0) {
         defaultConnector = 'or';
       }
-      if (connectors.length > 0) {
-        defaultConnector = connectors[0]; // eslint-disable-line prefer-destructuring
+      if (connectors.length > 0 && isConnector(connectors[0])) {
+        defaultConnector = connectors[0];
       }
 
-      if (operators.length > 0) {
-        defaultOperator = operators[0]; // eslint-disable-line prefer-destructuring
+      if (operators.length > 0 && isOperator(operators[0])) {
+        defaultOperator = operators[0];
       }
 
       const filters: AcmsFilter[] = [];
       for (let i = 0; i < count; i++) {
-        const value = values[i];
+        const value = values[i] as string;
         const operator: Operator = isOperator(operators[i])
-          ? operators[i]
+          ? (operators[i] as Operator)
           : defaultOperator;
         const connector: Connector = isConnector(connectors[i])
-          ? connectors[i]
+          ? (connectors[i] as Connector)
           : defaultConnector;
 
         filters.push({

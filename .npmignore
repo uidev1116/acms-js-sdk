@@ -12,14 +12,15 @@ node_modules
 examples
 .editorconfig
 .eslintignore
-.eslintrc.cjs
+eslint.config.js
 .prettierignore
-.prettierrc.cjs
+prettier.config.cjs
 postcss.config.cjs
 tsconfig.json
 tsconfig.node.json
 vite.config.ts
 *.local
+CLAUDE.md
 
 # Editor directories and files
 .vscode/*

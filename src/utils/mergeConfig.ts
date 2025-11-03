@@ -5,7 +5,9 @@
  * @returns マージされた設定
  */
 function mergeConfig(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaults: Record<string, any>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   overrides: Record<string, any>,
 ) {
   const result = { ...defaults };
@@ -38,6 +40,7 @@ export default mergeConfig;
 /**
  * プレーンオブジェクトかどうかを判定する
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isPlainObject(value: any): value is Record<string, any> {
   if (typeof value !== 'object' || value === null) {
     return false;

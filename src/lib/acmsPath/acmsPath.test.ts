@@ -172,9 +172,18 @@ describe('acmsPath', () => {
   });
 
   test('work with api context', () => {
+    // Default is v2
     expect(acmsPath({ blog: 'blog', api: 'summary_index' })).toBe(
-      'blog/api/summary_index/',
+      'blog/api/v2/summary_index/',
     );
+    // Explicit v2
+    expect(
+      acmsPath({ blog: 'blog', api: 'summary_index' }, { apiVersion: 'v2' }),
+    ).toBe('blog/api/v2/summary_index/');
+    // v1
+    expect(
+      acmsPath({ blog: 'blog', api: 'summary_index' }, { apiVersion: 'v1' }),
+    ).toBe('blog/api/summary_index/');
   });
 
   test('work with searchParams context', () => {

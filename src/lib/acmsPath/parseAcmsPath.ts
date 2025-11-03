@@ -113,12 +113,28 @@ export default function parseAcmsPath(
               break;
             case 'utid':
             case 'admin':
-            case 'api':
             case 'keyword':
             case 'order':
               context[segmentKey] = value;
               i++;
               break;
+            case 'api': {
+              // Check if next slug is a version (e.g., 'v2', 'v3')
+              if (/^v\d+$/.test(value)) {
+                context.apiVersion = value as 'v1' | 'v2';
+                const moduleId = slugs[i + 2];
+                if (moduleId !== undefined) {
+                  context.api = moduleId;
+                  i += 2;
+                }
+              } else {
+                // No version means v1
+                context.apiVersion = 'v1';
+                context.api = value;
+                i++;
+              }
+              break;
+            }
             case 'tpl':
               context.tpl = collectSlugs(slugs, i + 1, segmentSlugs);
               i += context.tpl.split('/').length; // 次のセグメントまでスキップ

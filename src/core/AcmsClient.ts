@@ -51,6 +51,7 @@ export default class AcmsClient {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async request<T = any>(
     urlComposable: URLComposable,
     options: AcmsClientOptions = {},
@@ -124,6 +125,7 @@ export default class AcmsClient {
     return new URL(acmsPath({ ...urlComposable }, options), this.baseUrl);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async get<T = any>(
     urlComposable: URLComposable,
     options: AcmsClientOptions = {},
@@ -134,6 +136,7 @@ export default class AcmsClient {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static isAcmsFetchError(payload: any) {
     return isAcmsFetchError(payload);
   }
