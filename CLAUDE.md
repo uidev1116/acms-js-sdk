@@ -58,6 +58,43 @@ Outputs both ESM and CommonJS formats with TypeScript declarations.
 - **TypeScript** with strict mode enabled
 - Supports Node.js >=18.0.0 (volta config specifies 24.11.0)
 
+### Commit Conventions
+
+This project follows [Conventional Commits v1.0.0](https://www.conventionalcommits.org/ja/v1.0.0/) specification for commit messages.
+
+**Format:**
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+**Types:**
+- `feat:` - New feature (MINOR version)
+- `fix:` - Bug fix (PATCH version)
+- `docs:` - Documentation changes only
+- `style:` - Code style changes (formatting, semicolons, etc.)
+- `refactor:` - Code refactoring without changing functionality
+- `perf:` - Performance improvements
+- `test:` - Adding or updating tests
+- `build:` - Changes to build system or dependencies
+- `ci:` - Changes to CI configuration files
+- `chore:` - Other changes that don't modify src or test files
+
+**Breaking Changes:**
+- Add `!` after type/scope: `feat!:` or `feat(api)!:`
+- Or add `BREAKING CHANGE:` in footer (triggers MAJOR version)
+
+**Examples:**
+```bash
+feat(parser): add ability to parse arrays
+fix: prevent racing of requests
+docs: update README with new API examples
+feat!: drop support for Node 16
+```
+
 ## Key Patterns
 
 ### API Client Usage
