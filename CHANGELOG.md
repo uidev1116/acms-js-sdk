@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/uidev1116/acms-js-sdk/compare/v0.3.1...v0.4.0) (2025-12-21)
+
+
+### Features
+
+* **ci:** add manual workflow dispatch to publish specific versions ([3e546af](https://github.com/uidev1116/acms-js-sdk/commit/3e546af62a9ca2f369da0706faf1f9cd35302898))
+
 ## [0.3.1](https://github.com/uidev1116/acms-js-sdk/compare/v0.3.0...v0.3.1) (2025-12-21)
 
 
