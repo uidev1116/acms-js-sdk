@@ -197,6 +197,26 @@ describe('acmsPath', () => {
     );
   });
 
+  test('work with URLSearchParams', () => {
+    expect(
+      acmsPath({
+        searchParams: new URLSearchParams({ keyword: 'a-blog cms' }),
+      }),
+    ).toBe('?keyword=a-blog+cms');
+    expect(
+      acmsPath({ searchParams: new URLSearchParams({ foo: '1', bar: '2' }) }),
+    ).toBe('?foo=1&bar=2');
+    expect(
+      acmsPath({
+        blog: 'blog',
+        searchParams: new URLSearchParams([
+          ['tag', 'apple'],
+          ['tag', 'grape'],
+        ]),
+      }),
+    ).toBe('blog/?tag=apple&tag=grape');
+  });
+
   test('work with custom segments', () => {
     const params = {
       bid: 1,
