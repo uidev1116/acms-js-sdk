@@ -2,6 +2,12 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag to publish (e.g., v0.3.1)'
+        required: false
+        type: string
 name: release-please
 permissions:
   contents: write
@@ -15,17 +21,18 @@ jobs:
         id: release
         with:
           release-type: node
+        if: github.event_name != 'workflow_dispatch'
       # The logic below handles the npm publication:
       - uses: actions/checkout@v4
-        # these if statements ensure that a publication only occurs when
-        # a new release is created:
-        if: ${{ steps.release.outputs.release_created }}
+        with:
+          ref: ${{ github.event.inputs.version || 'master' }}
+        if: ${{ steps.release.outputs.release_created || github.event_name == 'workflow_dispatch' }}
       - uses: actions/setup-node@v4
         with:
           node-version-file: 'package.json'
           registry-url: 'https://registry.npmjs.org'
-        if: ${{ steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.release_created || github.event_name == 'workflow_dispatch' }}
       - run: npm ci
-        if: ${{ steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.release_created || github.event_name == 'workflow_dispatch' }}
       - run: npm publish
-        if: ${{ steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.release_created || github.event_name == 'workflow_dispatch' }}
