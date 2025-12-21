@@ -20,7 +20,7 @@ export interface AcmsPathParams {
   admin?: string;
   tpl?: string;
   api?: string;
-  searchParams?: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  searchParams?: Record<string, any> | URLSearchParams; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export interface AcmsContext {

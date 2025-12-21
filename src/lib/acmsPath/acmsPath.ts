@@ -268,7 +268,10 @@ export default function acmsPath(
     path += '/';
   }
 
-  const queryString = stringify(params.searchParams, { format: 'RFC1738' });
+  const queryString =
+    params.searchParams instanceof URLSearchParams
+      ? params.searchParams.toString()
+      : stringify(params.searchParams, { format: 'RFC1738' });
   if (queryString.length > 0) {
     path += `?${queryString}`;
   }
