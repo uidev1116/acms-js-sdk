@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.1](https://github.com/uidev1116/acms-js-sdk/compare/v0.3.0...v0.3.1) (2025-12-21)
+
+
+### Bug Fixes
+
+* **acmsPath:** support URLSearchParams for searchParams parameter ([57bfcac](https://github.com/uidev1116/acms-js-sdk/commit/57bfcac4ef48010ff8b24d86da7023be1935db2c))
+* **acmsPath:** support URLSearchParams for searchParams parameter ([53c1561](https://github.com/uidev1116/acms-js-sdk/commit/53c15610d4761782df3059e1556e3f6210810e06))
+
 ## [0.3.0](https://github.com/uidev1116/acms-js-sdk/compare/v0.2.0...v0.3.0) (2025-11-03)
 
 
